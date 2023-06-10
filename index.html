@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test POST Request</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 50%;
+        }
+
+        .output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form id="request-form">
+        <input type="text" id="url" placeholder="Enter the URL" required>
+        <textarea id="body" rows="10" placeholder="Enter the request body" required></textarea>
+        <button type="submit">Send POST Request</button>
+    </form>
+    <div class="output" id="output"></div>
+    
+    <script>
+        const form = document.getElementById('request-form');
+        const urlField = document.getElementById('url');
+        const bodyField = document.getElementById('body');
+        const output = document.getElementById('output');
+
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            const url = urlField.value;
+            const body = JSON.parse(bodyField.value);
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            })
+            .then(response => response.json())
+            .then(data => {
+                output.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            })
+            .catch(error => {
+                output.innerHTML = `<p style="color: red">${error}</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
